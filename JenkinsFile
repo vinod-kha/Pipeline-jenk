@@ -1,0 +1,77 @@
+pipeline {
+    agent any
+    environment {
+        name = "Vinod from Git pipeline"
+    }
+    parameters {
+        string(name: "Vamshi" , defaultValue: "Madhu" , description: "hi rakesh , could you please go to home ..?")
+        booleanParam(name: "ISMale" , defaultValue: "True" , description: "")
+        choice(name: "City" , choices: ["bengluru","Pune","madhugiri"] , description: "")
+       
+    }
+    stages {
+        stage('Run a Command') {
+            steps {
+                sh '''
+                ls
+                pwd
+                echo "hello vinod , from Test"
+                cal 2023
+                '''
+            }
+        }
+        stage('Environment Variables') {
+            environment {
+                username = "Vinod ,from Envi block "
+            }
+            steps {
+                sh '''
+                echo "${BUILD_ID}"
+                echo "${name}" 
+                echo "${username}" 
+                '''
+            }
+        }
+        stage('parameters') {
+            steps {
+                sh '''
+                echo 'hello , from Parameters'
+                echo "${name}" 
+                echo "${Vamshi}" 
+                '''
+            }
+        }
+        stage('Continues ..?') {
+            input {
+                message "Shall we go next step"
+                ok "yes , if your done"
+            }
+            steps {
+                sh '''
+                echo "hello, from Prod"
+                '''
+            }
+        }
+         stage('Deploy on Prod') {
+            steps {
+                sh '''
+                echo "hello, from Prod"
+                '''
+            }
+        }
+    }
+    post {
+        always {
+            echo 'hello brother , i will run if fail or success'
+        }
+        failure {
+            echo 'hello brother ,it is failed'
+        }
+        success {
+            echo 'hello brother , it is success'
+        }
+        aborted {
+            echo 'hello brother , it is success'
+        }
+    }
+}
